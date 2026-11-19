@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformer Energy Monitoring System (kWh)</title>
+    <!-- Dark theme energy monitoring stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation / Header -->
+        <header class="top-header">
+            <div class="header-title-group">
+                <h1>Transformer Energy Monitor</h1>
+                <p class="header-subtitle">Live Optical Pulse Feeder & Substation Telemetry &bull; 1 kWh = 3200 blinks</p>
+            </div>
+            <div class="header-status-group">
+                <span id="system-status-badge" class="status-badge status-waiting">WAITING FOR ESP32</span>
+                <span id="system-last-sync" class="last-sync-text">Waiting for first ESP32 packet...</span>
+            </div>
+        </header>
+
+        <!-- Main Dashboard: Two-Column Side-by-Side Layout -->
+        <main class="dashboard-split">
+
+            <!-- ============================================================= -->
+            <!-- BLOCK 1: HOUSE ENERGY DETAILS (Left Column - in kWh)          -->
+            <!-- ============================================================= -->
+            <section class="panel-block panel-left">
+                <div class="panel-header">
+                    <div class="panel-title-wrap">
+                        <h2>House Energy Details</h2>
+                        <span class="calibration-tag">1 kWh = 3200 blinks</span>
+                    </div>
+                    <span id="active-houses-count" class="badge-count">4 houses</span>
+                </div>
+
+                <!-- List of house cards (IN1 is Live ESP32, IN2..IN4 are simulated) -->
+                <div id="houses-container" class="houses-list">
+                    <!-- Cards will be populated and updated dynamically by script.js -->
+                </div>
+
+                <!-- Running Total (Σ) Card at bottom of Block 1 in kWh -->
+                <div class="running-total-card">
+                    <div class="total-label-row">
+                        <span class="total-label-tag">&#x03A3; TOTAL ENERGY CONSUMED</span>
+                        <span class="total-subtext">Sum of all active house loads (kWh)</span>
+                    </div>
+                    <div class="total-value-row">
+                        <span id="val-running-total" class="big-number">--</span>
+                        <span class="unit-large">kWh</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================= -->
+            <!-- BLOCK 2: TRANSFORMER DETAILS (Right Column - in kWh)         -->
+            <!-- ============================================================= -->
+            <section class="panel-block panel-right">
+                <div class="panel-header">
+                    <h2>Transformer Details</h2>
+                    <span id="val-transformer-id-badge" class="badge-count">TC1</span>
+                </div>
+
+                <!-- Always-visible Grid of Transformer Metric Cards -->
+                <div id="transformer-grid" class="transformer-grid">
+                    <!-- Card 1: TC Count -->
+                    <div class="metric-card">
+                        <div class="metric-label">TC COUNT</div>
+                        <div class="metric-value-row">
+                            <span id="val-tc-count" class="big-number">1</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Total Input (I/P) in kWh -->
+                    <div class="metric-card">
+                        <div class="metric-label">TOTAL INPUT (I/P)</div>
+                        <div class="metric-value-row">
+                            <span id="val-dt-output" class="big-number">30.0</span>
+                            <span class="unit">kWh</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Total Energy Consumed by Houses (in kWh) -->
+                    <div class="metric-card">
+                        <div class="metric-label">TOTAL CONSUMED</div>
+                        <div class="metric-value-row">
+                            <span id="val-load-details" class="big-number">--</span>
+                            <span class="unit">kWh</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Total Transformer Capacity (in kWh) -->
+                    <div class="metric-card">
+                        <div class="metric-label">TRANSFORMER CAPACITY</div>
+                        <div class="metric-value-row">
+                            <span id="val-tf-capacity" class="big-number">30.0</span>
+                            <span class="unit">kWh</span>
+                        </div>
+                    </div>
+
+                    <!-- Load vs Capacity Overview Card (Full Width) -->
+                    <div class="metric-card capacity-overview-card">
+                        <div class="capacity-header-row">
+                            <span class="metric-label">CONSUMPTION VS TOTAL INPUT (30 kWh)</span>
+                            <span id="val-load-pct-badge" class="capacity-pct-badge">0.0% used</span>
+                        </div>
+                        <div class="capacity-stat-row">
+                            <span id="val-load-vs-capacity-text" class="capacity-text">-- / 30.0 kWh used</span>
+                        </div>
+                        <!-- Utilization Progress Bar -->
+                        <div class="progress-track">
+                            <div id="capacity-progress-fill" class="progress-fill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Bottom Footer with Connection Help & Tunnel Info -->
+        <footer class="bottom-footer">
+            <div class="footer-item">
+                <span class="footer-label">Local Dashboard:</span>
+                <code>http://localhost:5000</code>
+            </div>
+            <div class="footer-item">
+                <span class="footer-label">Tunnel Endpoint (for ESP32 on Friend's Wi-Fi):</span>
+                <code>https://&lt;TUNNEL_URL&gt;/api/data</code>
+            </div>
+            <div class="footer-item auto-refresh-note">
+                &#x21BB; Auto-refreshing every 2s
+            </div>
+        </footer>
+    </div>
+
+    <!-- Client-side auto-update script -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.env
+
+# Binaries & archives
+*.exe
+*.zip
+*.tar.gz
+ngrok.exe
+ngrok
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Notes
+cd CUsersLENOVODocumentsESP_servere.txt

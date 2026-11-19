@@ -1,0 +1,13 @@
+Electrical theft:"
+
+Photo transistor-esp32 super mini c3-ineternet-webpage 
+
+
+photo transistor gives the analog vtg for LED blink then the esp which count the led blink  and convert to kwh, send the data to webpage using two separate internet, esp32 which can store the data ,when the internet is connected the data is updated to web page 
+
+
+ESP32 super mini c3 internet-tunneling-webserver through internet
+
+
+tunnelling -ngrok api
+antigrvity
